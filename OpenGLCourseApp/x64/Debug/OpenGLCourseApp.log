@@ -1,0 +1,84 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (OpenGLCourseApp.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Camera.cpp
+  Light.cpp
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\light.cpp(25): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\light.cpp(26): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\light.cpp(28): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\light.cpp(29): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+  Mesh.cpp
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\mesh.cpp(31): warning C4305: 'argument': truncation from 'int' to 'GLboolean'
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\mesh.cpp(31): warning C4309: 'argument': truncation of constant value
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\mesh.cpp(33): warning C4305: 'argument': truncation from 'int' to 'GLboolean'
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\mesh.cpp(33): warning C4309: 'argument': truncation of constant value
+  WaveSimulation.cpp
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.h(16): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.h(17): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\wavesimulation.cpp(66): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\wavesimulation.cpp(134): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\wavesimulation.cpp(158): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\wavesimulation.cpp(157): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+  Shader.cpp
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\shader.cpp(157): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
+  Texture.cpp
+  Window.cpp
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.h(16): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.h(17): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.cpp(136): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.cpp(137): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.cpp(141): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.cpp(142): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.cpp(144): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.cpp(145): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  Generating Code...
+d:\issei\documents\visual studio 2017\projects\wavesimulation\openglcourseapp\window.cpp(86): warning C4715: 'Window::Initialize': not all control paths return a value
+Light.obj : error LNK2001: unresolved external symbol __imp___glewUniform1f
+Light.obj : error LNK2001: unresolved external symbol __imp___glewUniform3f
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewBindBuffer
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewBufferData
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewDeleteBuffers
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewGenBuffers
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewBindVertexArray
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewDeleteVertexArrays
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewGenVertexArrays
+WaveSimulation.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function "public: bool __cdecl Window::getShouldClose(void)" (?getShouldClose@Window@@QEAA_NXZ)
+WaveSimulation.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function main
+WaveSimulation.obj : error LNK2019: unresolved external symbol glfwGetTime referenced in function main
+WaveSimulation.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function "public: void __cdecl Window::swapBuffers(void)" (?swapBuffers@Window@@QEAAXXZ)
+WaveSimulation.obj : error LNK2001: unresolved external symbol __imp___glewUniformMatrix4fv
+WaveSimulation.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewAttachShader
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewCompileShader
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewCreateProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewCreateShader
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewDeleteProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramInfoLog
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramiv
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderInfoLog
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderiv
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetUniformLocation
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewLinkProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewShaderSource
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewValidateProgram
+Texture.obj : error LNK2001: unresolved external symbol __imp___glewActiveTexture
+Texture.obj : error LNK2001: unresolved external symbol __imp___glewGenerateMipmap
+Window.obj : error LNK2019: unresolved external symbol __imp_glewInit referenced in function "public: int __cdecl Window::Initialize(void)" (?Initialize@Window@@QEAAHXZ)
+Window.obj : error LNK2019: unresolved external symbol glfwInit referenced in function "public: int __cdecl Window::Initialize(void)" (?Initialize@Window@@QEAAHXZ)
+Window.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function "public: __cdecl Window::~Window(void)" (??1Window@@QEAA@XZ)
+Window.obj : error LNK2019: unresolved external symbol glfwWindowHint referenced in function "public: int __cdecl Window::Initialize(void)" (?Initialize@Window@@QEAAHXZ)
+Window.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function "public: int __cdecl Window::Initialize(void)" (?Initialize@Window@@QEAAHXZ)
+Window.obj : error LNK2019: unresolved external symbol glfwDestroyWindow referenced in function "public: __cdecl Window::~Window(void)" (??1Window@@QEAA@XZ)
+Window.obj : error LNK2019: unresolved external symbol glfwSetWindowShouldClose referenced in function "private: static void __cdecl Window::handleKeys(struct GLFWwindow *,int,int,int,int)" (?handleKeys@Window@@CAXPEAUGLFWwindow@@HHHH@Z)
+Window.obj : error LNK2019: unresolved external symbol glfwGetFramebufferSize referenced in function "public: int __cdecl Window::Initialize(void)" (?Initialize@Window@@QEAAHXZ)
+Window.obj : error LNK2019: unresolved external symbol glfwSetWindowUserPointer referenced in function "public: int __cdecl Window::Initialize(void)" (?Initialize@Window@@QEAAHXZ)
+Window.obj : error LNK2019: unresolved external symbol glfwGetWindowUserPointer referenced in function "private: static void __cdecl Window::handleKeys(struct GLFWwindow *,int,int,int,int)" (?handleKeys@Window@@CAXPEAUGLFWwindow@@HHHH@Z)
+Window.obj : error LNK2019: unresolved external symbol glfwSetInputMode referenced in function "public: int __cdecl Window::Initialize(void)" (?Initialize@Window@@QEAAHXZ)
+Window.obj : error LNK2019: unresolved external symbol glfwSetKeyCallback referenced in function "private: void __cdecl Window::createCallbacks(void)" (?createCallbacks@Window@@AEAAXXZ)
+Window.obj : error LNK2019: unresolved external symbol glfwSetCursorPosCallback referenced in function "private: void __cdecl Window::createCallbacks(void)" (?createCallbacks@Window@@AEAAXXZ)
+Window.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function "public: int __cdecl Window::Initialize(void)" (?Initialize@Window@@QEAAHXZ)
+Window.obj : error LNK2001: unresolved external symbol __imp_glewExperimental
+D:\Issei\Documents\Visual Studio 2017\Projects\WaveSimulation\\..\..\External Libs\GLEW\lib\Release\Win32\glew32.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+D:\Issei\Documents\Visual Studio 2017\Projects\WaveSimulation\\..\..\External Libs\GLFW\lib-vc2015\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+D:\Issei\Documents\Visual Studio 2017\Projects\WaveSimulation\x64\Debug\WaveSimulation.exe : fatal error LNK1120: 47 unresolved externals

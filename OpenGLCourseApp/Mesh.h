@@ -1,19 +1,27 @@
 #pragma once
+#include <iostream>
 
 #include <GL/glew.h>
 class Mesh
 {
 public:
+
+	GLfloat *vertices;
+	unsigned int *indices;
+
 	Mesh();
 
-	void CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int numofVertices, unsigned int numofIndices);
+	void CreateMesh();
 	void RenderMesh();
 	void CleanMesh();
 
 	~Mesh();
+	
+protected:
+	unsigned int numofVertices;
+	unsigned int numofIndices;
 
 private:
 	GLuint VAO, VBO, IBO;
-	GLsizei indexCount;
 };
 

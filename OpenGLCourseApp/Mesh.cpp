@@ -7,13 +7,13 @@ Mesh::Mesh()
 	VAO = 0;
 	VBO = 0;
 	IBO = 0;
-	indexCount = 0;
+
+	numofVertices = 0;
+	numofIndices = 0;
 }
 
-void Mesh::CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int numofVertices, unsigned int numofIndices)
+void Mesh::CreateMesh()
 {
-	indexCount = numofIndices;
-
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
@@ -37,6 +37,7 @@ void Mesh::CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int num
 	glBindVertexArray(0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 }
 
 void Mesh::RenderMesh()
@@ -44,7 +45,7 @@ void Mesh::RenderMesh()
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)(numofIndices), GL_UNSIGNED_INT, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -70,7 +71,14 @@ void Mesh::CleanMesh()
 		VAO = 0;
 	}
 
-	indexCount = 0;
+	numofVertices = 0;
+	numofIndices = 0;
+
+	// Delete Arrays
+	delete(vertices);
+	delete(indices);
+	vertices = NULL;
+	indices = NULL;
 }
 
 Mesh::~Mesh()

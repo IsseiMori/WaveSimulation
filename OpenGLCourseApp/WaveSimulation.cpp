@@ -24,13 +24,13 @@
 
 const float toRadians = 3.14159265f / 180.0f;
 
+const float gridSize = 10;
+const int gridN = 5;
+
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
 Camera camera;
-
-Texture brickTexture;
-Texture dirtTexture;
 
 Light mainLight;
 
@@ -72,30 +72,56 @@ void calcAverageNormals(unsigned int * indices, unsigned int indicesCount, GLflo
 
 void CreateObjects()
 {
-	unsigned int indices[] = {
-		0, 3, 1,
-		1, 3, 2,
-		2, 3, 0,
-		0, 1, 2
-	};
-	
-	GLfloat vertices[] = {
-	//  x      y      z			u     v			nx	  ny    nz
-		-1.0f, -1.0f, 0.0f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, -1.0f, 1.0f,		0.5f, 0.0f,		0.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,		0.5f, 1.0f,		0.0f, 0.0f, 0.0f
-	};
+	/*
+	  x
+	  ***(0,0)
+	  ***
+	  ***z
+	*/
+	GLfloat vertices[gridN * gridN * 8];
+	unsigned int indices[(gridN - 1) * (gridN - 1) * 6];
+	for (int z = 0; z < gridN; z++)
+	{
+		for (int x = 0; x < gridN; x++)
+		{
+			// Define the location of the first entry
+			int vHead = z * gridN * 8 + x * 8;
 
-	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
+			// vertices position, uv, normal
+			vertices[vHead + 0] = (GLfloat)(gridSize / gridN * x);
+			vertices[vHead + 1] = 0.0f;
+			vertices[vHead + 2] = (GLfloat)(gridSize / gridN * z);
+			vertices[vHead + 3] = (GLfloat)(1.0f / gridN * x);
+			vertices[vHead + 4] = (GLfloat)(1.0f / gridN * z);
+			vertices[vHead + 5] = 0.0f;
+			vertices[vHead + 6] = 1.0f;
+			vertices[vHead + 7] = 0.0f;
+
+			if (z != gridN - 1 && x != gridN - 1)
+			{
+				int iHead = z * (gridN - 1) * 6 + x * 6;
+				int corner = x + gridN * z;
+				indices[iHead + 0] = corner;
+				indices[iHead + 1] = corner + gridN + 1;
+				indices[iHead + 2] = corner + 1;
+				indices[iHead + 3] = corner;
+				indices[iHead + 4] = corner + gridN;
+				indices[iHead + 5] = corner + gridN + 1;
+			}
+
+		}
+	}
+
+	for (int i = 0; i < (gridN - 1) * (gridN - 1) * 6; i++)
+	{
+		printf("%d ", indices[i]);
+	}
+
+	// calcAverageNormals(indices, 12, vertices, 32, 8, 5);
 
 	Mesh *obj1 = new Mesh();
-	obj1->CreateMesh(vertices, indices, 32, 12);
+	obj1->CreateMesh(vertices, indices, gridN * gridN * 8, (gridN - 1) * (gridN - 1) * 6);
 	meshList.push_back(obj1);
-
-	Mesh *obj2 = new Mesh();
-	obj2->CreateMesh(vertices, indices, 32, 12);
-	meshList.push_back(obj2);
 
 }
 
@@ -114,12 +140,7 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
-
-	brickTexture = Texture("Textures/brick.png");
-	brickTexture.LoadTexture();
-	dirtTexture = Texture("Textures/dirt.png");
-	dirtTexture.LoadTexture();
+	camera = Camera(glm::vec3(0.0f, 2.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.05f);
 
 	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, 1.0f, -2.0f, 1.0f);
 
@@ -158,22 +179,11 @@ int main()
 							uniformDiffuseIntensity, uniformDirection);
 			
 		glm::mat4 model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		brickTexture.UseTexture();
 		meshList[0]->RenderMesh();
-
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		dirtTexture.UseTexture();
-		meshList[1]->RenderMesh();
-
 
 		glUseProgram(0);
 

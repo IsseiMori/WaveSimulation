@@ -102,22 +102,29 @@ void CreateObjects()
 				int iHead = z * (gridN - 1) * 6 + x * 6;
 				int corner = x + gridN * z;
 				indices[iHead + 0] = corner;
-				indices[iHead + 1] = corner + gridN + 1;
-				indices[iHead + 2] = corner + 1;
+				indices[iHead + 1] = corner + 1;
+				indices[iHead + 2] = corner + gridN + 1;
 				indices[iHead + 3] = corner;
-				indices[iHead + 4] = corner + gridN;
-				indices[iHead + 5] = corner + gridN + 1;
+				indices[iHead + 4] = corner + gridN + 1;
+				indices[iHead + 5] = corner + gridN;
 			}
 
 		}
 	}
 
-	for (int i = 0; i < (gridN - 1) * (gridN - 1) * 6; i++)
+	// calcAverageNormals(indices, (gridN - 1) * (gridN - 1) * 6, vertices, gridN * gridN * 8, 8, 5);
+
+	for (int i = 0; i < gridN * gridN * 8; i++)
 	{
-		printf("%d ", indices[i]);
+		if (i % 8 == 0) printf("\n");
+		printf("%f ", vertices[i]);
 	}
 
-	// calcAverageNormals(indices, 12, vertices, 32, 8, 5);
+	for (int i = 0; i < (gridN - 1) * (gridN - 1) * 6; i++)
+	{
+		if (i % 6 == 0) printf("\n");
+		printf("%d ", indices[i]);
+	}
 
 	Mesh *obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, gridN * gridN * 8, (gridN - 1) * (gridN - 1) * 6);
@@ -142,7 +149,7 @@ int main()
 
 	camera = Camera(glm::vec3(0.0f, 2.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.05f);
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, 1.0f, -2.0f, 1.0f);
+	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, 3.0f, -2.0f, 1.0f);
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, 
 			uniformAmbientColor = 0, uniformAmbientIntensity = 0, uniformDirection = 0, uniformDiffuseIntensity = 0;

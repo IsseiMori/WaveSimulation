@@ -21,6 +21,7 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "Light.h"
+#include "Waves.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -34,8 +35,7 @@ Camera camera;
 
 Light mainLight;
 
-GLfloat deltaTime = 0.0f;
-GLfloat lastTime = 0.0f;
+Waves waves;
 
 // Vetex Shader
 static const char* vShader = "shaders/shader.vert";
@@ -144,17 +144,24 @@ int main()
 	mainWindow = Window(800, 600);
 	mainWindow.Initialize();
 
+	
 	CreateObjects();
 	CreateShaders();
 
 	camera = Camera(glm::vec3(0.0f, 2.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.05f);
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, 3.0f, -2.0f, 1.0f);
+	mainLight = Light(0.27f, 0.51f, 0.7f, 0.2f, 2.0f, 3.0f, -2.0f, 1.0f);
+
+	waves = Waves(gridN, 10.0f, 1.0f);
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, 
 			uniformAmbientColor = 0, uniformAmbientIntensity = 0, uniformDirection = 0, uniformDiffuseIntensity = 0;
 
 	glm::mat4 projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
+
+	// Record time to adjust FPS
+	GLfloat deltaTime = 0.0f;
+	GLfloat lastTime = 0.0f;
 
 	// Loop until window closed
 	while (!mainWindow.getShouldClose())
@@ -162,6 +169,8 @@ int main()
 		GLfloat now = glfwGetTime();
 		deltaTime = now - lastTime;
 		lastTime = now;
+
+		waves.Update(deltaTime);
 
 		// Get and handle user input events
 		glfwPollEvents();

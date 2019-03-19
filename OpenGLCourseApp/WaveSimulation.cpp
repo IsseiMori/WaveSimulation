@@ -21,7 +21,6 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "Light.h"
-#include "Waves.h"
 #include "WaveGrid.h"
 
 const float toRadians = 3.14159265f / 180.0f;
@@ -32,8 +31,6 @@ std::vector<Shader> shaderList;
 Camera camera;
 
 Light mainLight;
-
-Waves waves;
 
 // Vetex Shader
 static const char* vShader = "shaders/shader.vert";
@@ -88,7 +85,7 @@ void CreateObjects()
 	*/
 
 	WaveGrid *obj1 = new WaveGrid();
-	obj1->CreateGrid(5, 10.0f);
+	obj1->CreateGrid(5, 1000.0f, 10.0f, 1.0f);
 	obj1->CreateMesh();
 	meshList.push_back(obj1);
 
@@ -110,7 +107,7 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 2.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.05f);
+	camera = Camera(glm::vec3(500.0f, 500.0f, -500.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90.0f, 0.0f, 50.0f, 0.05f);
 
 	mainLight = Light(0.27f, 0.51f, 0.7f, 0.2f, 2.0f, 3.0f, -2.0f, 1.0f);
 
@@ -119,7 +116,7 @@ int main()
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, 
 			uniformAmbientColor = 0, uniformAmbientIntensity = 0, uniformDirection = 0, uniformDiffuseIntensity = 0;
 
-	glm::mat4 projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 2000.0f);
 
 	// Record time to adjust FPS
 	GLfloat deltaTime = 0.0f;
@@ -133,6 +130,7 @@ int main()
 		lastTime = now;
 
 		// waves.Update(deltaTime);
+		meshList[0]->Update(deltaTime);
 
 		// Get and handle user input events
 		glfwPollEvents();
@@ -161,7 +159,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		meshList[0]->RenderMesh();
+		meshList[0]->RenderMeshWithVerticesUpdated();
 
 		glUseProgram(0);
 

@@ -12,7 +12,12 @@ public:
 	Mesh();
 
 	void CreateMesh();
+
 	void RenderMesh();
+	void RenderMeshWithVerticesUpdated();
+
+	void virtual Update(GLfloat deltaTime);
+
 	void CleanMesh();
 
 	~Mesh();

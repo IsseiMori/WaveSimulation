@@ -44,12 +44,34 @@ void Mesh::RenderMesh()
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glDrawElements(GL_TRIANGLES, (GLsizei)(numofIndices), GL_UNSIGNED_INT, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
+
+void Mesh::RenderMeshWithVerticesUpdated()
+{
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numofVertices, vertices, GL_STATIC_DRAW);
+
+	glDrawElements(GL_TRIANGLES, (GLsizei)(numofIndices), GL_UNSIGNED_INT, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
+
+void Mesh::Update(GLfloat deltaTime)
+{
+}
+
 
 void Mesh::CleanMesh()
 {

@@ -67,6 +67,8 @@ void WaveGrid::CreateGrid(int _gridX, int _gridZ, float _gridSize, GLfloat _wave
 
 	wavePeriod = _wavePeriod;
 	waveHeight = _waveHeight;
+
+	printf("%f\n", trochoidApproximation(24.83f, 1.0f, 39.0f, 15));
 }
 
 
@@ -142,7 +144,6 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 
 void WaveGrid::UpdateVertices()
 {
-	printf("%d\n", waveQueues[0].size());
 	for (int z = 0; z < gridZ; z++)
 	{
 		int currentWave = 0;
@@ -166,8 +167,14 @@ void WaveGrid::UpdateVertices()
 
 				float waveLength = waveQueues[z][currentWave] - waveQueues[z][currentWave + 1];
 				float crest = waveQueues[z][currentWave + 1] + waveLength / 2.0f;
+				float distToCrest = abs(crest - gridPosX);
 
-				vertices[vHead + 1] = abs(crest - gridPosX);
+				float a = waveLength / (2.0f * PI);
+				float b = waveHeight / 2.0f;
+
+				float y = trochoidApproximation(a, b, distToCrest, 12);
+
+				vertices[vHead + 1] = y * 10.0f;
 
 			}
 			// The current grid position is not in a wave
@@ -178,6 +185,43 @@ void WaveGrid::UpdateVertices()
 
 		}
 	}
+}
+
+
+float WaveGrid::trochoidApproximation(float a, float b, float x, int iteration)
+{
+	float leftVal = 0.0f;
+	float rightVal = a * PI - b * sin(PI);
+
+	float leftRad = 0.0f;
+	float rightRad = PI;
+
+	float middleRad = 0.0f;
+	float middleVal = 0.0f;
+
+	for (int i = 0; i < iteration; i++)
+	{
+		middleRad = (leftRad + rightRad) / 2.0f;
+
+		middleVal = a * middleRad - b * sin(middleRad);
+
+		if (x > middleVal)
+		{
+			leftRad = middleRad;
+			leftVal = middleVal;
+		}
+		else
+		{
+			rightRad = middleRad;
+			rightVal = middleVal;
+		}
+	}
+
+	float y = a - b * cos(middleRad);
+
+	float adjY = -(y - a);
+
+	return adjY;
 }
 
 

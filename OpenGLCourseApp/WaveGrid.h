@@ -36,5 +36,7 @@ private:
 	float waveHeight;
 
 	GLfloat timeCount;
+
+	float trochoidApproximation(float a, float b, float x, int iteration);
 };
 

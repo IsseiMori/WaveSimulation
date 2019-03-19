@@ -22,6 +22,7 @@
 #include "Texture.h"
 #include "Light.h"
 #include "WaveGrid.h"
+#include "OceanGround.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -89,6 +90,11 @@ void CreateObjects()
 	obj1->CreateMesh();
 	meshList.push_back(obj1);
 
+	OceanGround *obj2 = new OceanGround();
+	obj2->CreateGround(100, 1000.0f, -200.0f, -200.0f, -10.0f, -10.0f);
+	obj2->CreateMesh();
+	meshList.push_back(obj2);
+
 }
 
 void CreateShaders()
@@ -107,7 +113,7 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(500.0f, 500.0f, -500.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90.0f, 0.0f, 50.0f, 0.05f);
+	camera = Camera(glm::vec3(500.0f, 500.0f, -500.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90.0f, 0.0f, 200.0f, 0.05f);
 
 	mainLight = Light(0.27f, 0.51f, 0.7f, 0.2f, 2.0f, 3.0f, -2.0f, 1.0f);
 
@@ -169,6 +175,8 @@ int main()
 			glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 			meshList[0]->RenderMeshWithVerticesUpdated();
+
+			meshList[1]->RenderMesh();
 
 			glUseProgram(0);
 

@@ -42,6 +42,9 @@
     <ClInclude Include="WaveGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OceanGround.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Mesh.cpp">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WaveGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OceanGround.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

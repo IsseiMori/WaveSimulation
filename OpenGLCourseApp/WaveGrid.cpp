@@ -14,6 +14,8 @@ void WaveGrid::CreateGrid(int _gridX, int _gridZ, float _gridSize, GLfloat _wave
 
 	timeCount = 0.0f;
 
+	iniWaveLength = 0.0f;
+
 	/*
 	  x
 	  ***(0,0)
@@ -67,8 +69,6 @@ void WaveGrid::CreateGrid(int _gridX, int _gridZ, float _gridSize, GLfloat _wave
 
 	wavePeriod = _wavePeriod;
 	waveHeight = _waveHeight;
-
-	printf("%f\n", trochoidApproximation(24.83f, 1.0f, 39.0f, 15));
 }
 
 
@@ -105,6 +105,8 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 	if (waveQueues[0].back() >= 0.0f)
 	{
 		float waveLength = G * pow(wavePeriod, 2) / (2.0f * PI);
+
+		iniWaveLength = waveLength;
 
 		for (int i = 0; i < waveQueues.size(); i++)
 		{
@@ -191,7 +193,7 @@ void WaveGrid::UpdateVertices()
 
 				float y = trochoidApproximation(a, b, distToCrest, 12);
 
-				vertices[vHead + 1] = y * 10.0f;
+				vertices[vHead + 1] = y * iniWaveLength / waveLength * 10.0f;
 
 			}
 			// The current grid position is not in a wave

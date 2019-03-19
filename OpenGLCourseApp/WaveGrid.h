@@ -37,6 +37,8 @@ private:
 
 	float waveHeight;
 
+	float iniWaveLength;
+
 	GLfloat timeCount;
 
 	float x0z0, x0z1, x1z0, x1z1;

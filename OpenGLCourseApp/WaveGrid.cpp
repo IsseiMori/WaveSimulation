@@ -127,10 +127,13 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 			float x1 = x1z0 * (1.0f - z / (float)(gridZ)) + x1z1 * (z / (float)(gridZ));
 			float depth = abs(x0 * (1.0f - waveQueues[z][x] / gridSize) + x1 * (waveQueues[z][x] / gridSize));
 
-			if (depth / waveLength < 0.5f)
+			if (depth / waveLength < 0.05f)
 			{
-				celerity = sqrt(G * waveLength / (2.0f * PI));
-				printf("a");
+				celerity = sqrt(G * depth);
+			}
+			else if(depth / waveLength < 0.5f)
+			{
+				celerity = sqrt( (G * waveLength) / (2.0f * PI) * tanh(2.0f * PI * depth / waveLength) );
 			}
 			else
 			{

@@ -87,12 +87,12 @@ void CreateObjects()
 
 	WaveGrid *obj1 = new WaveGrid();
 	obj1->CreateGrid(100, 10, 1000.0f, 10.0f, 1.0f);
-	obj1->setGroundHeight(-200.0f, -200.0f, -10.0f, -10.0f);
+	obj1->setGroundHeight(-150.0f, -150.0f, -2.0f, -2.0f);
 	obj1->CreateMesh();
 	meshList.push_back(obj1);
 
 	OceanGround *obj2 = new OceanGround();
-	obj2->CreateGround(100, 1000.0f, -200.0f, -200.0f, -10.0f, -10.0f);
+	obj2->CreateGround(100, 1000.0f, -150.0f, -150.0f, -2.0f, -2.0f);
 	obj2->CreateMesh();
 	meshList.push_back(obj2);
 

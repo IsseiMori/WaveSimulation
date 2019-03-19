@@ -6,9 +6,10 @@ WaveGrid::WaveGrid()
 }
 
 
-void WaveGrid::CreateGrid(int _gridN, float _gridSize, GLfloat _wavePeriod, float _waveHeight)
+void WaveGrid::CreateGrid(int _gridX, int _gridZ, float _gridSize, GLfloat _wavePeriod, float _waveHeight)
 {
-	gridN = _gridN;
+	gridX = _gridX;
+	gridZ = _gridZ;
 	gridSize = _gridSize;
 
 	timeCount = 0.0f;
@@ -20,46 +21,46 @@ void WaveGrid::CreateGrid(int _gridN, float _gridSize, GLfloat _wavePeriod, floa
 	  ***z
 	*/
 
-	numofVertices = gridN * gridN * 8;
-	numofIndices = (gridN - 1) * (gridN - 1) * 6;
+	numofVertices = gridX * gridZ * 8;
+	numofIndices = (gridX - 1) * (gridZ - 1) * 6;
 
 	vertices = new GLfloat[numofVertices];
 	indices = new unsigned int[numofIndices];
 
-	for (int z = 0; z < gridN; z++)
+	for (int z = 0; z < gridZ; z++)
 	{
-		for (int x = 0; x < gridN; x++)
+		for (int x = 0; x < gridX; x++)
 		{
 			// Define the location of the first entry
-			int vHead = z * gridN * 8 + x * 8;
+			int vHead = z * gridX * 8 + x * 8;
 
 			// vertices position, uv, normal
-			vertices[vHead + 0] = (GLfloat)(gridSize / gridN * x);
+			vertices[vHead + 0] = (GLfloat)(gridSize / gridX * x);
 			vertices[vHead + 1] = 0.0f;
-			vertices[vHead + 2] = (GLfloat)(gridSize / gridN * z);
-			vertices[vHead + 3] = (GLfloat)(1.0f / gridN * x);
-			vertices[vHead + 4] = (GLfloat)(1.0f / gridN * z);
+			vertices[vHead + 2] = (GLfloat)(gridSize / gridZ * z);
+			vertices[vHead + 3] = (GLfloat)(1.0f / gridX * x);
+			vertices[vHead + 4] = (GLfloat)(1.0f / gridZ * z);
 			vertices[vHead + 5] = 0.0f;
 			vertices[vHead + 6] = 1.0f;
 			vertices[vHead + 7] = 0.0f;
 
-			if (z != gridN - 1 && x != gridN - 1)
+			if (z != gridZ - 1 && x != gridX - 1)
 			{
-				int iHead = z * (gridN - 1) * 6 + x * 6;
-				int corner = x + gridN * z;
+				int iHead = z * (gridX - 1) * 6 + x * 6;
+				int corner = x + gridX * z;
 				indices[iHead + 0] = corner;
 				indices[iHead + 1] = corner + 1;
-				indices[iHead + 2] = corner + gridN + 1;
+				indices[iHead + 2] = corner + gridX + 1;
 				indices[iHead + 3] = corner;
-				indices[iHead + 4] = corner + gridN + 1;
-				indices[iHead + 5] = corner + gridN;
+				indices[iHead + 4] = corner + gridX + 1;
+				indices[iHead + 5] = corner + gridX;
 			}
 
 		}
 	}
 
 	// Initialize waveQueues vector with queues
-	for (int i = 0; i < gridN; i++)
+	for (int i = 0; i < gridZ; i++)
 	{
 		waveQueues.push_back(std::deque<float>());
 	}
@@ -141,15 +142,16 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 
 void WaveGrid::UpdateVertices()
 {
-	for (int z = 0; z < gridN; z++)
+	printf("%d\n", waveQueues[0].size());
+	for (int z = 0; z < gridZ; z++)
 	{
 		int currentWave = 0;
 
-		for (int x = gridN - 1; x >= 0; x--)
+		for (int x = gridX - 1; x >= 0; x--)
 		{
-			int vHead = z * gridN * 8 + x * 8;
+			int vHead = z * gridX * 8 + x * 8;
 
-			float gridPosX = gridSize * x / gridN;
+			float gridPosX = gridSize * x / gridX;
 
 			// If the current grid position is in a wave
 			if (waveQueues[z].size() >= 2					// There is at least one start and end of a wave
@@ -157,12 +159,15 @@ void WaveGrid::UpdateVertices()
 			{
 
 				// Skip until the wave the current grid position belongs
-				while (gridPosX > waveQueues[z].back() &&  gridPosX < waveQueues[z][currentWave + 1]) 
+				while (gridPosX > waveQueues[z].back() && gridPosX < waveQueues[z][currentWave + 1]) 
 				{
 					currentWave++;
 				}
 
-				vertices[vHead + 1] = waveQueues[z][currentWave] / 10.0f;
+				float waveLength = waveQueues[z][currentWave] - waveQueues[z][currentWave + 1];
+				float crest = waveQueues[z][currentWave + 1] + waveLength / 2.0f;
+
+				vertices[vHead + 1] = abs(crest - gridPosX);
 
 			}
 			// The current grid position is not in a wave

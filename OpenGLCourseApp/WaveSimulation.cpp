@@ -85,7 +85,7 @@ void CreateObjects()
 	*/
 
 	WaveGrid *obj1 = new WaveGrid();
-	obj1->CreateGrid(5, 1000.0f, 10.0f, 1.0f);
+	obj1->CreateGrid(100, 10, 1000.0f, 10.0f, 1.0f);
 	obj1->CreateMesh();
 	meshList.push_back(obj1);
 
@@ -122,48 +122,58 @@ int main()
 	GLfloat deltaTime = 0.0f;
 	GLfloat lastTime = 0.0f;
 
+	bool paused = false;
+
 	// Loop until window closed
 	while (!mainWindow.getShouldClose())
 	{
-		GLfloat now = glfwGetTime();
-		deltaTime = now - lastTime;
-		lastTime = now;
-
-		// waves.Update(deltaTime);
-		meshList[0]->Update(deltaTime);
 
 		// Get and handle user input events
 		glfwPollEvents();
 
-		camera.keyControl(mainWindow.getKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		GLfloat now = glfwGetTime();
+		deltaTime = now - lastTime;
+		lastTime = now;
 
-		// Clear window
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// Check if space key is pressed
+		paused = mainWindow.getKeys()[GLFW_KEY_SPACE] ? true : false;
 
-		shaderList[0].UseShader();
-		uniformModel = shaderList[0].GetModelLocation();
-		uniformProjection = shaderList[0].GetProjectionLocation();
-		uniformView = shaderList[0].GetViewLocation();
-		uniformAmbientColor = shaderList[0].GetAmbientColorLocation();
-		uniformAmbientIntensity = shaderList[0].GetAmbientIntensityLocation();
-		uniformDirection = shaderList[0].GetDirectionLocation();
-		uniformDiffuseIntensity = shaderList[0].GetDiffuseIntensityLocation();
+		if (!paused)
+		{
+			// waves.Update(deltaTime);
+			meshList[0]->Update(deltaTime);
 
-		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor, 
-							uniformDiffuseIntensity, uniformDirection);
-			
-		glm::mat4 model = glm::mat4(1.0);
 
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		meshList[0]->RenderMeshWithVerticesUpdated();
+			camera.keyControl(mainWindow.getKeys(), deltaTime);
+			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
-		glUseProgram(0);
+			// Clear window
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		mainWindow.swapBuffers();
+			shaderList[0].UseShader();
+			uniformModel = shaderList[0].GetModelLocation();
+			uniformProjection = shaderList[0].GetProjectionLocation();
+			uniformView = shaderList[0].GetViewLocation();
+			uniformAmbientColor = shaderList[0].GetAmbientColorLocation();
+			uniformAmbientIntensity = shaderList[0].GetAmbientIntensityLocation();
+			uniformDirection = shaderList[0].GetDirectionLocation();
+			uniformDiffuseIntensity = shaderList[0].GetDiffuseIntensityLocation();
+
+			mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor,
+				uniformDiffuseIntensity, uniformDirection);
+
+			glm::mat4 model = glm::mat4(1.0);
+
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+			meshList[0]->RenderMeshWithVerticesUpdated();
+
+			glUseProgram(0);
+
+			mainWindow.swapBuffers();
+		}
 	}
 	
 	return 0;

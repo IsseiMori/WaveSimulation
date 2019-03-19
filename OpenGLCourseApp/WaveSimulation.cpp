@@ -87,6 +87,7 @@ void CreateObjects()
 
 	WaveGrid *obj1 = new WaveGrid();
 	obj1->CreateGrid(100, 10, 1000.0f, 10.0f, 1.0f);
+	obj1->setGroundHeight(-200.0f, -200.0f, -10.0f, -10.0f);
 	obj1->CreateMesh();
 	meshList.push_back(obj1);
 

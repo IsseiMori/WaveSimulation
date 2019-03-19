@@ -114,21 +114,35 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 
 
 	// Update the position of each wave
-	for (int i = 0; i < waveQueues.size(); i++)
+	for (int z = 0; z < waveQueues.size(); z++)
 	{
 		float waveLength = 0.0f, celerity = 0.0f;
 
-		for (int j = 0; j < waveQueues[i].size() - 1; j++)
+		for (int x = 0; x < waveQueues[z].size() - 1; x++)
 		{
-			waveLength = waveQueues[i][j] - waveQueues[i][j + 1];
-			celerity = sqrt(G * waveLength / (2.0f * PI));
+			waveLength = waveQueues[z][x] - waveQueues[z][x + 1];
+
+			// Bilinear interpolation of height
+			float x0 = x0z0 * (1.0f - z / (float)(gridZ)) + x0z1 * (z / (float)(gridZ));
+			float x1 = x1z0 * (1.0f - z / (float)(gridZ)) + x1z1 * (z / (float)(gridZ));
+			float depth = abs(x0 * (1.0f - waveQueues[z][x] / gridSize) + x1 * (waveQueues[z][x] / gridSize));
+
+			if (depth / waveLength < 0.5f)
+			{
+				celerity = sqrt(G * waveLength / (2.0f * PI));
+				printf("a");
+			}
+			else
+			{
+				celerity = sqrt(G * waveLength / (2.0f * PI));
+			}
 
 			// Move the wave
-			waveQueues[i][j] += celerity * deltaTime;
+			waveQueues[z][x] += celerity * deltaTime;
 		}
 
 		// Move the outbounds wave
-		waveQueues[i][waveQueues[i].size() - 1] += celerity * deltaTime;
+		waveQueues[z][waveQueues[z].size() - 1] += celerity * deltaTime;
 	}
 
 	// If the first wave is too far
@@ -185,6 +199,15 @@ void WaveGrid::UpdateVertices()
 
 		}
 	}
+}
+
+
+void WaveGrid::setGroundHeight(float _x0z0, float _x0z1, float _x1z0, float _x1z1)
+{
+	x0z0 = _x0z0;
+	x0z1 = _x0z1;
+	x1z0 = _x1z0;
+	x1z1 = _x1z1;
 }
 
 

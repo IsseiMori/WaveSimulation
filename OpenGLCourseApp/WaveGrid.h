@@ -19,6 +19,8 @@ public:
 
 	void UpdateVertices();
 
+	void setGroundHeight(float _x0z0, float _x0z1, float _x1z0, float _x1z1);
+
 	~WaveGrid();
 
 private:
@@ -36,6 +38,8 @@ private:
 	float waveHeight;
 
 	GLfloat timeCount;
+
+	float x0z0, x0z1, x1z0, x1z1;
 
 	float trochoidApproximation(float a, float b, float x, int iteration);
 };

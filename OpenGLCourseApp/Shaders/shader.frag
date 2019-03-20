@@ -27,6 +27,8 @@ uniform Material material;
 
 uniform vec3 eyePosition;
 
+uniform bool heightColorOn;
+
 void main()
 {
 	vec4 ambientColor = vec4(directionalLight.color, 1.0f) * directionalLight.ambientIntensity;
@@ -35,6 +37,13 @@ void main()
 	vec4 diffuseColor = vec4(1.0f, 1.0f, 1.0f, 1.0f) * directionalLight.diffuseIntensity * diffuseFactor;
 
 	vec4 specularColor = vec4(0, 0, 0, 0);
+
+	vec4 heightColor = vec4(0, 0, 0, 0);
+	if (heightColorOn)
+	{
+		float height = FragPos.y / 30.0f;
+		heightColor = vec4(height, height, height, 1.0f);
+	}
 
 	if (diffuseFactor > 0.0f)
 	{
@@ -49,5 +58,5 @@ void main()
 		}
 	}
 
-	color = (ambientColor + diffuseColor + specularColor);
+	color = (ambientColor + diffuseColor + specularColor + heightColor);
 }

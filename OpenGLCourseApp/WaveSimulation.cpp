@@ -86,7 +86,8 @@ int main()
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 			uniformAmbientColor = 0, uniformAmbientIntensity = 0, uniformDirection = 0, uniformDiffuseIntensity = 0,
-			uniformSpecularIntensity = 0, uniformShininess = 0;
+			uniformSpecularIntensity = 0, uniformShininess = 0,
+			uniformHeightColor = 0;
 
 	glm::mat4 projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 2000.0f);
 
@@ -134,6 +135,7 @@ int main()
 			uniformEyePosition = shaderList[0].GetEyePositionLocation();
 			uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 			uniformShininess = shaderList[0].GetShininessLocation();
+			uniformHeightColor = shaderList[0].GetHeightColorOnLocation();
 
 			mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor,
 				uniformDiffuseIntensity, uniformDirection);
@@ -148,7 +150,12 @@ int main()
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			
 			shinnyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+			glUniform1i(uniformHeightColor, true);
+
 			meshList[0]->RenderMeshWithVerticesUpdated();
+
+			glUniform1i(uniformHeightColor, false);
 
 			meshList[1]->RenderMesh();
 

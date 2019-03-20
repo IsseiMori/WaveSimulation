@@ -130,7 +130,11 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 			float x1 = x1z0 * (1.0f - z / (float)(gridZ)) + x1z1 * (z / (float)(gridZ));
 			float depth = abs(x0 * (1.0f - waveQueues[z][x] / gridSize) + x1 * (waveQueues[z][x] / gridSize));
 
-			if (depth / waveLength < 0.05f)
+			if (depth < 1.0f)
+			{
+				celerity = sqrt(G * 1.0f);
+			}
+			else if (depth / waveLength < 0.05f)
 			{
 				celerity = sqrt(G * depth);
 			}
@@ -164,6 +168,9 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 
 void WaveGrid::UpdateVertices()
 {
+	float highestWave = 0.0f;
+	float shortestWave = 1000.0f;
+
 	for (int z = 0; z < gridZ; z++)
 	{
 		int currentWave = 0;
@@ -194,7 +201,18 @@ void WaveGrid::UpdateVertices()
 
 				float y = trochoidApproximation(a, b, distToCrest, 12);
 
-				vertices[vHead + 1] = y * iniWaveLength / waveLength * 10.0f;
+				float waveAmplitude = y * iniWaveLength / waveLength;
+				float waveHeight = waveAmplitude * 2.0f;
+
+				vertices[vHead + 1] = waveAmplitude;
+
+				highestWave = std::max(highestWave, waveHeight);
+				shortestWave = std::min(shortestWave, waveLength);
+
+				if (waveHeight / waveLength > 1.0f / 7.0f)
+				{
+					waveQueues[z].pop_front();
+				}
 
 			}
 			// The current grid position is not in a wave
@@ -205,6 +223,9 @@ void WaveGrid::UpdateVertices()
 
 		}
 	}
+
+	printf("Highest Wave : %f\n", highestWave);
+	printf("Shortest Wave : %f\n", shortestWave);
 }
 
 

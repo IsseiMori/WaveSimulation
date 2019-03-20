@@ -46,19 +46,18 @@ static const char* fShader = "shaders/shader.frag";
 
 void CreateObjects()
 {
-	float x0z0 = -100.0f, x0z1 = -200.0f, x1z0 = -5.0f, x1z1 = -1.0f;
+	float x0z0 = -100.0f, x0z1 = -100.0f, x1z0 = 10.0f, x1z1 = 10.0f;
 
 	WaveGrid *obj1 = new WaveGrid();
-	obj1->CreateGrid(100, 10, 1000.0f, 10.0f, 1.0f);
+	obj1->CreateGrid(300, 10, 1000.0f, 10.0f, 2.0f);
 	obj1->setGroundHeight(x0z0, x0z1, x1z0, x1z1);
 	obj1->CreateMesh();
 	meshList.push_back(obj1);
 
 	OceanGround *obj2 = new OceanGround();
-	obj2->CreateGround(100, 10, 1000.0f, x0z0, x0z1, x1z0, x1z1);
+	obj2->CreateGround(300, 10, 1000.0f, x0z0, x0z1, x1z0, x1z1);
 	obj2->CreateMesh();
 	meshList.push_back(obj2);
-
 }
 
 void CreateShaders()

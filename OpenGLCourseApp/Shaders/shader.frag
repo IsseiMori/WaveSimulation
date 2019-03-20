@@ -44,6 +44,10 @@ void main()
 		float height = FragPos.y / 30.0f;
 		heightColor = vec4(height, height, height, 1.0f);
 	}
+	else
+	{
+		ambientColor = vec4(0.82f, 0.584f, 0.165f, 1.0f);
+	}
 
 	if (diffuseFactor > 0.0f)
 	{

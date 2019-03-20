@@ -13,6 +13,6 @@ public:
 
 private:
 	int gridX, gridZ;
-	int gridSize;
+	float gridSize;
 };
 

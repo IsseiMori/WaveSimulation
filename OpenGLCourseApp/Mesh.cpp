@@ -68,6 +68,51 @@ void Mesh::RenderMeshWithVerticesUpdated()
 }
 
 
+void Mesh::CreateCube()
+{
+	/*
+	6 7
+	4 5
+	 
+	2 3
+	0 1
+
+	*/
+
+	GLfloat v[] = {
+		0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+	};
+
+	unsigned int i[] = {
+		6, 2, 0,
+		6, 0, 4,
+		4, 0, 1,
+		4, 1, 5,
+		5, 1, 3,
+		5, 3, 7,
+		7, 3, 2,
+		7, 2, 6,
+		6, 4, 5,
+		6, 5, 7
+	};
+
+	numofVertices = 64;
+	numofIndices = 30;
+
+	vertices = &v[0];
+	indices = &i[0];
+
+	CalcAverageNormals(8, 5);
+}
+
+
 void Mesh::Update(GLfloat deltaTime)
 {
 }

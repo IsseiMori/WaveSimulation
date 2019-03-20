@@ -3,6 +3,7 @@
 #include <vector>
 #include <deque>
 #include <cmath>
+#include <algorithm>
 
 #include "Mesh.h"
 

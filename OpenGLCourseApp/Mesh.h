@@ -16,6 +16,8 @@ public:
 
 	void CreateMesh();
 
+	void CreateCube();
+
 	void RenderMesh();
 	void RenderMeshWithVerticesUpdated();
 

@@ -7,12 +7,12 @@ class OceanGround :
 public:
 	OceanGround();
 
-	void CreateGround(int _gridN, float _gridSize, float x0z0, float x0z1, float x1z0, float x1z1);
+	void CreateGround(int _gridX, int _gridZ, float _gridSize, float x0z0, float x0z1, float x1z0, float x1z1);
 
 	~OceanGround();
 
 private:
-	int gridN;
+	int gridX, gridZ;
 	int gridSize;
 };
 

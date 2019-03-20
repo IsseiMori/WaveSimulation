@@ -77,6 +77,8 @@ void WaveGrid::Update(GLfloat deltaTime)
 	UpdateWaves(deltaTime);
 
 	UpdateVertices();
+
+	// CalcAverageNormals(8, 5);
 }
 
 
@@ -86,7 +88,6 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 
 	if (timeCount > wavePeriod)
 	{
-		printf("add wave\n");
 		timeCount = 0.0f;
 	}
 

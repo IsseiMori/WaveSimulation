@@ -23,6 +23,7 @@
 #include "Light.h"
 #include "WaveGrid.h"
 #include "OceanGround.h"
+#include "Material.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -30,6 +31,9 @@ Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
 Camera camera;
+
+Material shinnyMaterial;
+Material dullMaterial;
 
 Light mainLight;
 
@@ -39,60 +43,19 @@ static const char* vShader = "shaders/shader.vert";
 // Fragment Shader
 static const char* fShader = "shaders/shader.frag";
 
-void calcAverageNormals(unsigned int * indices, unsigned int indicesCount, GLfloat * vertices, unsigned int verticesCount, unsigned int vLength, unsigned int normalOffset)
-{
-	for (size_t i = 0; i < indicesCount; i += 3)
-	{
-		unsigned int in0 = indices[i] * vLength;
-		unsigned int in1 = indices[i + 1] * vLength;
-		unsigned int in2 = indices[i + 2] * vLength;
-		glm::vec3 v1(vertices[in1] - vertices[in0], vertices[in1 + 1] - vertices[in0 + 1], vertices[in1 + 2] - vertices[in0 + 2]);
-		glm::vec3 v2(vertices[in2] - vertices[in0], vertices[in2 + 1] - vertices[in0 + 1], vertices[in2 + 2] - vertices[in0 + 2]);
-		glm::vec3 normal = glm::cross(v1, v2);
-		normal = glm::normalize(normal);
-		
-		in0 += normalOffset; in1 += normalOffset, in2 += normalOffset;
-		vertices[in0] += normal.x; vertices[in0 + 1] += normal.y; vertices[in0 + 2] += normal.z;
-		vertices[in1] += normal.x; vertices[in1 + 1] += normal.y; vertices[in1 + 2] += normal.z;
-		vertices[in2] += normal.x; vertices[in2 + 1] += normal.y; vertices[in2 + 2] += normal.z;
-	}
-
-	for (size_t i = 0; i < verticesCount / vLength; i++)
-	{
-		unsigned int nOffset = i * vLength + normalOffset;
-		glm::vec3 vec(vertices[nOffset], vertices[nOffset + 1], vertices[nOffset + 2]);
-		vec = glm::normalize(vec);
-		vertices[nOffset] = vec.x; vertices[nOffset + 1] = vec.y; vertices[nOffset + 2] = vec.z;
-	}
-}
 
 void CreateObjects()
 {
-	
-
-	// calcAverageNormals(indices, (gridN - 1) * (gridN - 1) * 6, vertices, gridN * gridN * 8, 8, 5);
-	/*
-	for (int i = 0; i < gridN * gridN * 8; i++)
-	{
-		if (i % 8 == 0) printf("\n");
-		printf("%f ", vertices[i]);
-	}
-
-	for (int i = 0; i < (gridN - 1) * (gridN - 1) * 6; i++)
-	{
-		if (i % 6 == 0) printf("\n");
-		printf("%d ", indices[i]);
-	}
-	*/
+	float x0z0 = -100.0f, x0z1 = -200.0f, x1z0 = -5.0f, x1z1 = -1.0f;
 
 	WaveGrid *obj1 = new WaveGrid();
 	obj1->CreateGrid(100, 10, 1000.0f, 10.0f, 1.0f);
-	obj1->setGroundHeight(-150.0f, -150.0f, -2.0f, -2.0f);
+	obj1->setGroundHeight(x0z0, x0z1, x1z0, x1z1);
 	obj1->CreateMesh();
 	meshList.push_back(obj1);
 
 	OceanGround *obj2 = new OceanGround();
-	obj2->CreateGround(100, 1000.0f, -150.0f, -150.0f, -2.0f, -2.0f);
+	obj2->CreateGround(100, 10, 1000.0f, x0z0, x0z1, x1z0, x1z1);
 	obj2->CreateMesh();
 	meshList.push_back(obj2);
 
@@ -107,7 +70,7 @@ void CreateShaders()
 
 int main()
 {
-	mainWindow = Window(800, 600);
+	mainWindow = Window(800, 600); // 1366, 768 or 1280, 1024 or 1024, 768
 	mainWindow.Initialize();
 
 	
@@ -116,12 +79,14 @@ int main()
 
 	camera = Camera(glm::vec3(500.0f, 500.0f, -500.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90.0f, 0.0f, 200.0f, 0.05f);
 
-	mainLight = Light(0.27f, 0.51f, 0.7f, 0.2f, 2.0f, 3.0f, -2.0f, 1.0f);
+	shinnyMaterial = Material(0.0f, 1);
 
-	//waves = Waves(gridN, 10.0f, 1.0f);
+	mainLight = Light(0.27f, 0.51f, 0.7f, 1.0f, 0.0f, 1.0f, 0.3f, 0.2f);
 
-	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, 
-			uniformAmbientColor = 0, uniformAmbientIntensity = 0, uniformDirection = 0, uniformDiffuseIntensity = 0;
+
+	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
+			uniformAmbientColor = 0, uniformAmbientIntensity = 0, uniformDirection = 0, uniformDiffuseIntensity = 0,
+			uniformSpecularIntensity = 0, uniformShininess = 0;
 
 	glm::mat4 projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 2000.0f);
 
@@ -166,15 +131,23 @@ int main()
 			uniformAmbientIntensity = shaderList[0].GetAmbientIntensityLocation();
 			uniformDirection = shaderList[0].GetDirectionLocation();
 			uniformDiffuseIntensity = shaderList[0].GetDiffuseIntensityLocation();
+			uniformEyePosition = shaderList[0].GetEyePositionLocation();
+			uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
+			uniformShininess = shaderList[0].GetShininessLocation();
 
 			mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor,
 				uniformDiffuseIntensity, uniformDirection);
 
-			glm::mat4 model = glm::mat4(1.0);
-
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+
+			glm::mat4 model = glm::mat4(1.0);
+
+			// model = glm::translate(model, glm::vec3(0.0f, -100.0f, 0.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			
+			shinnyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 			meshList[0]->RenderMeshWithVerticesUpdated();
 
 			meshList[1]->RenderMesh();

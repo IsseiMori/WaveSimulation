@@ -2,6 +2,9 @@
 #include <iostream>
 
 #include <GL/glew.h>
+
+#include <glm/glm.hpp>
+
 class Mesh
 {
 public:
@@ -17,6 +20,8 @@ public:
 	void RenderMeshWithVerticesUpdated();
 
 	void virtual Update(GLfloat deltaTime);
+
+	void CalcAverageNormals(unsigned int vLength, unsigned int normalOffset);
 
 	void CleanMesh();
 

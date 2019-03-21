@@ -41,7 +41,7 @@ void main()
 	vec4 heightColor = vec4(0, 0, 0, 0);
 	if (heightColorOn)
 	{
-		float height = FragPos.y / 30.0f;
+		float height = FragPos.y / 100.0f;
 		heightColor = vec4(height, height, height, 1.0f);
 	}
 	else

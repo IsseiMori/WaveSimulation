@@ -24,6 +24,7 @@
 #include "WaveGrid.h"
 #include "OceanGround.h"
 #include "Material.h"
+#include "Parameters.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -46,16 +47,15 @@ static const char* fShader = "shaders/shader.frag";
 
 void CreateObjects()
 {
-	float x0z0 = -100.0f, x0z1 = -100.0f, x1z0 = 10.0f, x1z1 = 10.0f;
-
 	WaveGrid *obj1 = new WaveGrid();
-	obj1->CreateGrid(300, 10, 1000.0f, 10.0f, 2.0f);
-	obj1->setGroundHeight(x0z0, x0z1, x1z0, x1z1);
+	obj1->CreateGrid(GRID_X, GRID_Z, GRID_SIZE_X, GRID_SIZE_Z, WAVE_PERIOD, WAVE_HEIGHT);
+	obj1->setGroundHeight(START_LEFT_HEIGHT, START_RIGHT_HEIGHT, END_LEFT_HEIGHT, END_RIGHT_HEIGHT);
 	obj1->CreateMesh();
 	meshList.push_back(obj1);
 
 	OceanGround *obj2 = new OceanGround();
-	obj2->CreateGround(300, 10, 1000.0f, x0z0, x0z1, x1z0, x1z1);
+	obj2->CreateGround(GRID_X, GRID_Z, GRID_SIZE_X, GRID_SIZE_Z, 
+		START_LEFT_HEIGHT, START_RIGHT_HEIGHT, END_LEFT_HEIGHT, END_RIGHT_HEIGHT);
 	obj2->CreateMesh();
 	meshList.push_back(obj2);
 }
@@ -69,7 +69,7 @@ void CreateShaders()
 
 int main()
 {
-	mainWindow = Window(800, 600); // 1366, 768 or 1280, 1024 or 1024, 768
+	mainWindow = Window(1024, 768); // 800, 600 or 1366, 768 or 1280, 1024 or 1024, 768
 	mainWindow.Initialize();
 
 	
@@ -88,7 +88,7 @@ int main()
 			uniformSpecularIntensity = 0, uniformShininess = 0,
 			uniformHeightColor = 0;
 
-	glm::mat4 projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 2000.0f);
+	glm::mat4 projection = glm::perspective(45.0f, mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 10000.0f);
 
 	// Record time to adjust FPS
 	GLfloat deltaTime = 0.0f;

@@ -6,11 +6,12 @@ WaveGrid::WaveGrid()
 }
 
 
-void WaveGrid::CreateGrid(int _gridX, int _gridZ, float _gridSize, GLfloat _wavePeriod, float _waveHeight)
+void WaveGrid::CreateGrid(int _gridX, int _gridZ, float _gridSizeX, float _gridSizeZ, GLfloat _wavePeriod, float _waveHeight)
 {
 	gridX = _gridX;
 	gridZ = _gridZ;
-	gridSize = _gridSize;
+	gridSizeX = _gridSizeX;
+	gridSizeZ = _gridSizeZ;
 
 	timeCount = 0.0f;
 
@@ -37,9 +38,9 @@ void WaveGrid::CreateGrid(int _gridX, int _gridZ, float _gridSize, GLfloat _wave
 			int vHead = z * gridX * 8 + x * 8;
 
 			// vertices position, uv, normal
-			vertices[vHead + 0] = (GLfloat)(gridSize / gridX * x);
+			vertices[vHead + 0] = (GLfloat)(gridSizeX / gridX * x);
 			vertices[vHead + 1] = 0.0f;
-			vertices[vHead + 2] = (GLfloat)(gridSize / gridZ * z);
+			vertices[vHead + 2] = (GLfloat)(gridSizeZ / gridZ * z);
 			vertices[vHead + 3] = (GLfloat)(1.0f / gridX * x);
 			vertices[vHead + 4] = (GLfloat)(1.0f / gridZ * z);
 			vertices[vHead + 5] = 0.0f;
@@ -128,7 +129,7 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 			// Bilinear interpolation of height
 			float x0 = x0z0 * (1.0f - z / (float)(gridZ)) + x0z1 * (z / (float)(gridZ));
 			float x1 = x1z0 * (1.0f - z / (float)(gridZ)) + x1z1 * (z / (float)(gridZ));
-			float depth = abs(x0 * (1.0f - waveQueues[z][x] / gridSize) + x1 * (waveQueues[z][x] / gridSize));
+			float depth = abs(x0 * (1.0f - waveQueues[z][x] / gridSizeX) + x1 * (waveQueues[z][x] / gridSizeX));
 
 			if (depth < 1.0f)
 			{
@@ -159,7 +160,7 @@ void WaveGrid::UpdateWaves(GLfloat deltaTime)
 	// Delete the wave
 	for (int i = 0; i < waveQueues.size(); i++)
 	{
-		if (waveQueues[i].front() > gridSize)
+		if (waveQueues[i].front() > gridSizeX * 1.5f)
 		{
 			waveQueues[i].pop_front();
 		}
@@ -179,7 +180,7 @@ void WaveGrid::UpdateVertices()
 		{
 			int vHead = z * gridX * 8 + x * 8;
 
-			float gridPosX = gridSize * x / gridX;
+			float gridPosX = gridSizeX * x / gridX;
 
 			// If the current grid position is in a wave
 			if (waveQueues[z].size() >= 2					// There is at least one start and end of a wave
@@ -225,7 +226,7 @@ void WaveGrid::UpdateVertices()
 	}
 
 	printf("Highest Wave : %f\n", highestWave);
-	printf("Shortest Wave : %f\n", shortestWave);
+	// printf("Shortest Wave : %f\n", shortestWave);
 }
 
 

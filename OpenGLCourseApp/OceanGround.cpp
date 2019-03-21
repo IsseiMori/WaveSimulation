@@ -5,11 +5,12 @@ OceanGround::OceanGround()
 }
 
 
-void OceanGround::CreateGround(int _gridX, int _gridZ, float _gridSize, float x0z0, float x0z1, float x1z0, float x1z1)
+void OceanGround::CreateGround(int _gridX, int _gridZ, float _gridSizeX, float _gridSizeZ, float x0z0, float x0z1, float x1z0, float x1z1)
 {
 	gridX = _gridX;
 	gridZ = _gridZ;
-	gridSize = _gridSize;
+	gridSizeX = _gridSizeX;
+	gridSizeZ = _gridSizeZ;
 
 
 	/*
@@ -38,9 +39,9 @@ void OceanGround::CreateGround(int _gridX, int _gridZ, float _gridSize, float x0
 			float xz = x0 * (1.0f - x / (float)(gridX)) + x1 * (x / (float)(gridX));
 
 			// vertices position, uv, normal
-			vertices[vHead + 0] = (GLfloat)(gridSize / gridX * x);
+			vertices[vHead + 0] = (GLfloat)(gridSizeX / gridX * x);
 			vertices[vHead + 1] = xz;
-			vertices[vHead + 2] = (GLfloat)(gridSize / gridZ * z);
+			vertices[vHead + 2] = (GLfloat)(gridSizeZ / gridZ * z);
 			vertices[vHead + 3] = (GLfloat)(1.0f / gridX * x);
 			vertices[vHead + 4] = (GLfloat)(1.0f / gridZ * z);
 			vertices[vHead + 5] = 0.0f;

@@ -12,7 +12,7 @@ class WaveGrid : public Mesh
 public:
 	WaveGrid();
 
-	void CreateGrid(int _gridX, int _gridZ, float _gridSize, GLfloat _wavePeriod, float _waveHeight);
+	void CreateGrid(int _gridX, int _gridZ, float _gridSizeX, float _gridSizeZ, GLfloat _wavePeriod, float _waveHeight);
 
 	void Update(GLfloat deltaTime);
 
@@ -30,7 +30,7 @@ private:
 	const float G = 9.81f;
 
 	int gridX, gridZ;
-	float gridSize;
+	float gridSizeX, gridSizeZ;
 
 	std::vector<std::deque<float>> waveQueues;
 
